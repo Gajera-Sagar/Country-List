@@ -1,0 +1,22 @@
+
+.country-name{
+    height: 40px;
+    width: 200px;
+    margin-bottom: 25px;
+    background-color: gray;
+}
+.detail{
+    display: flex;
+}
+.detail b, .detail div{
+    height: 20px;
+
+    margin-right: 10px;
+    width: 120px;
+    background-color: gray;
+}
+.img{
+    height: 40vh;
+    width: 40vw;
+    background-color: gray;
+}
