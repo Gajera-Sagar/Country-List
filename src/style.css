@@ -55,7 +55,7 @@ a {
     gap: 64px;
     flex-wrap: wrap;
     margin-inline: auto;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .country-card {
@@ -144,9 +144,9 @@ a {
 }
 
 @media(max-width: 768px) {
-    .countries-container {
+    /* .countries-container {
         justify-content: center;
-    }
+    } */
 
     .title {
         font-size: 16px;
