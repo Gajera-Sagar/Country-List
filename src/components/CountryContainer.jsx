@@ -1,7 +1,6 @@
-import { useContext, useState } from "react";
-import { useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import "../cssFile/country.css";
-import '../cssFile/countryContainer.css'
+import '../cssFile/countryContainer.css';
 import CountryContainerShimer from "./CountryContainerShimer";
 import { Link, useParams } from "react-router-dom";
 import PageNotFund from "./PageNotFund";
@@ -10,10 +9,9 @@ import { ThemeContext } from "../context/ThemeContext";
 export default function CountryContainer() {
   const [countryData, setCountryData] = useState(null);
   const [notFound, setNotFound] = useState(false);
- let [isDark]= useContext(ThemeContext)
+  const [isDark] = useContext(ThemeContext);
 
   const param = useParams();
-
   const countryName = param.country;
 
   useEffect(() => {
@@ -22,7 +20,7 @@ export default function CountryContainer() {
       .then(([data]) => {
         setCountryData({
           name: data.name.common,
-          nativeName: Object.values(data.name.nativeName)[0].common,
+          nativeName: Object.values(data.name.nativeName)[0]?.common,
           population: data.population.toLocaleString("en-IN"),
           region: data.region,
           subregion: data.subregion,
@@ -35,14 +33,15 @@ export default function CountryContainer() {
           flag: data.flags.svg,
           borders: [],
         });
-        if(data.borders !== undefined){
-          data.borders.map((border) => {
+        if (data.borders) {
+          data.borders.forEach((border) => {
             fetch(`https://restcountries.com/v3.1/alpha/${border}`)
               .then((res) => res.json())
               .then(([countryBorder]) => {
-                setCountryData((prevState)=>(
-                  {...prevState, borders: [...prevState.borders, countryBorder.name.common]}
-                ))
+                setCountryData((prevState) => ({
+                  ...prevState,
+                  borders: [...prevState.borders, countryBorder.name.common]
+                }));
               });
           });
         }
@@ -54,15 +53,12 @@ export default function CountryContainer() {
   }, [countryName]);
 
   if (notFound) {
-    return (
-     <PageNotFund/>
-    );
+    return <PageNotFund />;
   }
 
   return countryData === null ? (
     <CountryContainerShimer />
   ) : (
-    <>
     <div className={`main-country-detail-container ${isDark ? "dark" : ''}`}>
       <div className="country-details-container">
         <span className="back-button" onClick={() => window.history.back()}>
@@ -93,7 +89,6 @@ export default function CountryContainer() {
                 <span className="sub-region"></span>
                 {countryData.subregion}
               </p>
-
               <p>
                 <b>Capital: </b>
                 <span className="capital"></span>
@@ -116,7 +111,7 @@ export default function CountryContainer() {
                 {countryData.languages}
               </p>
             </div>
-            {countryData.borders.length !== 0 && 
+            {countryData.borders.length !== 0 &&
               <div className="border-countries">
                 <b>Border Countries: </b>&nbsp;
                 {countryData.borders.map((border) => (
@@ -125,14 +120,10 @@ export default function CountryContainer() {
                   </Link>
                 ))}
               </div>
-           }
-            {/* in Link [to] attribute use a ./ in url name is added behind the previous url else it replace the previous url
-       example of ./ = www.app/india click on the other country url is www.app/india/nepal
-       example of only / = www.app/india click on the other country url is www.app/nepal */}
+            }
           </div>
         </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 }
